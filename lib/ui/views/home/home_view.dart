@@ -75,7 +75,7 @@ class HomeView extends StackedView<HomeViewModel> with $HomeView{
                     itemCount: viewModel.data!.length ,
                     itemBuilder: (context, index) {
                       final item = viewModel.data![index];
-                      return buildCoinsItem(title: item?.T ?? "N/A" , description: item?.s ?? "N/A" , price:  formatDoubleString(item?.c) ?? "N/A" , percentage: item?.p  , boxColor: index%2 == 0 ? kcVeryLightBlue : kcWhite, showUpIcon: index%2 == 0 ? true : false);
+                      return buildCoinsItem(title: item?.T ?? "N/A" , description: item?.s ?? "N/A" , price:  formatDoubleString(item?.c) ?? "N/A" , percentage: item?.p  , boxColor: index%2 == 0 ? kcVeryLightBlue : kcWhite , isInProfit: viewModel.isProfit(item?.p ?? ""));
                     },
                   ),
                 ).expand();

@@ -6,6 +6,7 @@ import 'package:ampiy/data/Home/GetAllCoinsRequestDTO.dart';
 import 'package:ampiy/services/easyLoading/easyLoadingService.dart';
 import 'package:ampiy/services/home/webSocketService.dart';
 import 'package:ampiy/ui/views/home/home_view.form.dart';
+import 'package:ampiy/utility/utility.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeViewModel extends FormViewModel {
@@ -19,36 +20,36 @@ class HomeViewModel extends FormViewModel {
   List<AllCoinsDataResponseDTOData?>? get data => _data ?? [];
 
   void initialize() {
-    try{
+    try {
       _easyLoadingService.showLoader();
-    _webSocketService.subscription?.onData((message) {
-      _allData = AllCoinsDataResponseDTO.fromJson(jsonDecode(message)).data;
-      _data = ((searchValue == null) || (searchValue?.isEmpty ?? true))
-          ? _allData
-          : filter(_allData);
-      notifyListeners();
-    });
+      _webSocketService.subscription?.onData((message) {
+        _allData = AllCoinsDataResponseDTO.fromJson(jsonDecode(message)).data;
+        _data = ((searchValue == null) || (searchValue?.isEmpty ?? true))
+            ? _allData
+            : filter(_allData);
+        notifyListeners();
+      });
 
-    _webSocketService.subscription?.onError((error) {
+      _webSocketService.subscription?.onError((error) {
+        _easyLoadingService.showErrorToast(
+            title: "WebSocketError", description: error.toString());
+      });
+
+      _webSocketService.subscription?.onDone(() {
+        _webSocketService.removeListner();
+        _webSocketService.closeSocket();
+      });
+
+      if (_webSocketService.subscription?.isPaused ?? false) {
+        _webSocketService.subscription?.resume();
+      } else {
+        makeAllCoinsStreamRequest();
+      }
+      _easyLoadingService.removeLoader();
+    } catch (err) {
       _easyLoadingService.showErrorToast(
-          title: "WebSocketError", description: error.toString());
-    });
-
-    _webSocketService.subscription?.onDone(() {
-      _webSocketService.removeListner();
-      _webSocketService.closeSocket();
-    });
-
-    if (_webSocketService.subscription?.isPaused ?? false) {
-      _webSocketService.subscription?.resume();
-    } else {
-      makeAllCoinsStreamRequest();
+          title: "Error", description: err.toString());
     }
-    _easyLoadingService.removeLoader();
-    }catch(err){
-      _easyLoadingService.showErrorToast(title: "Error", description: err.toString());
-    }
-    
   }
 
   makeAllCoinsStreamRequest() {
@@ -72,6 +73,11 @@ class HomeViewModel extends FormViewModel {
     }
     return null;
   }
+
+  bool isProfit(String pValue) {
+    return isGreaterThanZero(pValue);
+  }
+
 
   @override
   void dispose() {

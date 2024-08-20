@@ -12,4 +12,6 @@ const Color kcBackgroundColor = kcDarkGreyColor;
 const Color kcVeryLightBlue = Color.fromARGB(255, 247, 245, 248);
 const Color kcWhite = Colors.white;
 const Color kcGreen = Colors.green;
+const Color kcRed = Colors.red;
+
 

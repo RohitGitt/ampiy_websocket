@@ -23,3 +23,15 @@ String _formatWithCommas(String integerPart) {
 
   return characters.join('');
 }
+
+
+ bool isGreaterThanZero(String value) {
+      double? doubleValue = double.tryParse(value);
+
+      if (doubleValue != null && doubleValue > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    
+  }

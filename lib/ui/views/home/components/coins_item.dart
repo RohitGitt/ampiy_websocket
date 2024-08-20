@@ -2,6 +2,7 @@ import 'package:ampiy/gen/assets.gen.dart';
 import 'package:ampiy/ui/common/app_colors.dart';
 import 'package:ampiy/ui/common/components/dump_widget.dart';
 import 'package:ampiy/ui/common/ui_helpers.dart';
+import 'package:ampiy/utility/utility.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -11,7 +12,7 @@ Widget buildCoinsItem(
     required Color boxColor,
     String? price,
     String? percentage,
-    bool showUpIcon = false,  
+    required bool isInProfit , 
   }) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -51,21 +52,21 @@ Widget buildCoinsItem(
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            border: Border.all(width: 2 , color: kcLightGrey),
+            border: Border.all(width: 2 , color: isInProfit ? kcGreen : kcRed),
             borderRadius: const BorderRadius.all(Radius.circular(5))
           ),
           child: Row(
             children: [
-              showUpIcon == true ? const Icon(
+              isInProfit == true ? const Icon(
                 Icons.arrow_upward,
                 color: kcGreen,
                 size: 20,
               ) : const Icon(
                 Icons.arrow_downward,
-                color: Colors.green,
+                color: kcRed,
                 size: 20,
               ),
-              buildText(title: percentage != null ? "$percentage%" : "N/A" , color: kcGreen , fontWeight: FontWeight.bold)
+              buildText(title: percentage != null ? "$percentage%" : "N/A" , color: isGreaterThanZero(percentage ?? "") ? kcGreen : kcRed , fontWeight: FontWeight.bold)
             ],
           ),
         )
