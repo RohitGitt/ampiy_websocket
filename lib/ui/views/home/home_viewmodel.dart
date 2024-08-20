@@ -37,7 +37,7 @@ class HomeViewModel extends FormViewModel {
 
       _webSocketService.subscription?.onDone(() {
         _webSocketService.removeListner();
-        _webSocketService.closeSocket();
+        // _webSocketService.closeSocket();
       });
 
       if (_webSocketService.subscription?.isPaused ?? false) {
@@ -47,6 +47,7 @@ class HomeViewModel extends FormViewModel {
       }
       _easyLoadingService.removeLoader();
     } catch (err) {
+      _easyLoadingService.showLoader();
       _easyLoadingService.showErrorToast(
           title: "Error", description: err.toString());
     }
